@@ -1,5 +1,5 @@
 import { useState } from 'react';
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { addTodo } from './store/todoSlice';
 import Header from './components/Header';
 import Input from './components/Input';
@@ -11,7 +11,11 @@ function App() {
   const [text, setText] = useState('');
   const [showFooter, setShowFooter] = useState(false);
   const dispatch = useDispatch();
- 
+  const todos = useSelector(state => state.todos.todos)
+
+  if (todos.length === 0 && showFooter === true) {
+      setShowFooter(false);
+  }
   
   function handleInput(text) {
     setText(text);
@@ -19,7 +23,7 @@ function App() {
 
   function handleClick(event) {
     event.preventDefault();
-    if (text === '') {
+    if (!text.trim()) {
       return;
     }
     dispatch(addTodo({text}));
